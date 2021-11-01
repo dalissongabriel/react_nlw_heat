@@ -1,5 +1,6 @@
-import styles from './styles.module.scss';
 import { VscGithubInverted } from 'react-icons/vsc';
+import styles from './styles.module.scss';
+
 export function LoginBox() {
   return (
     <div className={styles.loginBoxWrapper}>
