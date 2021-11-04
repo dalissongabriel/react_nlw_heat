@@ -1,17 +1,13 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { api } from "../services/api";
+import { LOCAL_STORAGE_TOKEN_USER_NAME } from "../constants";
+import { AuthService } from "../services/AuthService";
+import { UserService } from "../services/UserService";
 import { User } from "../types";
 
 interface AuthContextData {
   user: User | null;
-  singInUrl: string;
   singOut: () => void;
 }
-
-interface AuthResponse {
-  token: string;
-  user: User
-};
 
 interface AuthProvider {
   children: ReactNode;
@@ -21,24 +17,8 @@ const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({children}: AuthProvider) {
   const [user, setUser] = useState<User | null>(null);
-  const singInUrl = 'http://localhost:4000/github';
 
-  async function singIn(githubCode: string) {
-    const response = await api.post<AuthResponse>('/authenticate', {
-      code: githubCode,
-    });
-
-    const {token, user} = response.data;
-    localStorage.setItem('@dowhile:token', token); 
-    setUser(user);
-  }
-
-  function singOut() {
-    setUser(null);
-    localStorage.removeItem('@dowhile:token')
-  }
-
-  useEffect(()=>{
+  function getGithubCodeFromQueryString() {
     const url = window.location.href;
     const hasGithubCode = url.includes('?code=');
 
@@ -47,27 +27,40 @@ export function AuthProvider({children}: AuthProvider) {
       window.history.pushState({}, '', urlWithoutCode);
       singIn(githubCode);
     }
-  }, []);
+  }
 
-  useEffect(()=>{
-    const token = localStorage.getItem('@dowhile:token');
-    if (token) {
-      // all request before this, send authorization in header :)
-      api.defaults.headers.common.authorization = `Bearer ${token}`;
-      api.get<User>('/profile').then(response => {
-        setUser(response.data);
-      });
+  async function singIn(githubCode: string) {
+    try {
+      const response = await AuthService.singIn(githubCode);
+      const {token, user} = response.data;
+      localStorage.setItem(LOCAL_STORAGE_TOKEN_USER_NAME, token); 
+      setUser(user);
+    } catch (error) {
+      console.error(error);
     }
-  },[]) 
+  }
 
-  const providerValue = {
-    singInUrl: singInUrl,
-    singOut: singOut,
-    user: user,
-  };
+  function loadUserFromLocalStorageWhenExists() {
+    const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_USER_NAME);
+    if (token) {
+      UserService.loadProfile(token)
+        .then(response => {
+          setUser(response.data);
+        });
+    }
+  }
+
+  function singOut() {
+    setUser(null);
+    localStorage.removeItem('@dowhile:token')
+  }
+
+  useEffect(() => getGithubCodeFromQueryString(), []);
+
+  useEffect(() => loadUserFromLocalStorageWhenExists(), []);
 
   return (
-    <AuthContext.Provider value={providerValue}>
+    <AuthContext.Provider value={{singOut: singOut, user: user,}}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,15 +1,16 @@
 import { VscGithubInverted } from 'react-icons/vsc';
+import { API_URL_GITHUB_AUTH } from '../../constants';
 import { useAuthContext } from '../../contexts/auth';
 import styles from './styles.module.scss';
 
 export function LoginBox() {
-  const {singInUrl, user} = useAuthContext();
+  const {user} = useAuthContext();
 
   console.log(user);
   return (
     <div className={styles.loginBoxWrapper}>
       <strong>Entre e compartilhe sua mensagem</strong>
-      <a href={singInUrl} className={styles.singInWithGithub}>
+      <a href={API_URL_GITHUB_AUTH} className={styles.singInWithGithub}>
         <VscGithubInverted size="24" />
         Entrar com o Github
       </a>
