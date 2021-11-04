@@ -1,6 +1,9 @@
-export type User =  {
-  name: string,
-  avatar_url: string,
+export interface User {
+  id: string;
+  name: string;
+  avatar_url: number;
+  github_id: string;
+  login: string;
 }
 
 export type Message =  {
