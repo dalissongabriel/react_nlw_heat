@@ -1,3 +1,3 @@
 import { Message, User } from '../../types';
 
-export type Last3Messages = Message & { user: User }
+export type MessageAndUser = Message & { user: User }

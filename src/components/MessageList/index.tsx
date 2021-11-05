@@ -11,13 +11,13 @@ export function MessageList() {
       <ul className={styles.messageList}>
         {messages.map((message) => (
           <li className={styles.message} key={message.id}>
-          <p className={styles.messageContent}>{message.text}</p>
-          <div className={styles.messageUser}>
-            <div className={styles.userImage}>
-              <img src={message.user.avatar_url} alt={message.user.name} />
+            <p className={styles.messageContent}>{message.text}</p>
+            <div className={styles.messageUser}>
+              <div className={styles.userImage}>
+                <img src={message.user.avatar_url} alt={message.user.name} />
+              </div>
+              <span>{message.user.name}</span>
             </div>
-            <span>{message.user.name}</span>
-          </div>
         </li>
         ))}
       </ul>
