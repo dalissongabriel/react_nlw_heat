@@ -33,7 +33,7 @@ export function AuthProvider({children}: AuthProvider) {
     try {
       const response = await AuthService.singIn(githubCode);
       const {token, user} = response.data;
-      localStorage.setItem(LOCAL_STORAGE_TOKEN_USER_NAME, token); 
+      localStorage.setItem(LOCAL_STORAGE_TOKEN_USER_NAME, token);
       setUser(user);
     } catch (error) {
       console.error(error);
@@ -52,7 +52,7 @@ export function AuthProvider({children}: AuthProvider) {
 
   function singOut() {
     setUser(null);
-    localStorage.removeItem('@dowhile:token')
+    localStorage.removeItem(LOCAL_STORAGE_TOKEN_USER_NAME)
   }
 
   useEffect(() => getGithubCodeFromQueryString(), []);
@@ -60,7 +60,7 @@ export function AuthProvider({children}: AuthProvider) {
   useEffect(() => loadUserFromLocalStorageWhenExists(), []);
 
   return (
-    <AuthContext.Provider value={{singOut: singOut, user: user,}}>
+    <AuthContext.Provider value={{singOut, user}}>
       {children}
     </AuthContext.Provider>
   );
