@@ -1,6 +1,5 @@
 import { VscGithubInverted } from 'react-icons/vsc';
 import { API_URL_GITHUB_AUTH } from '../../constants';
-import { useAuthContext } from '../../contexts/auth';
 import styles from './styles.module.scss';
 
 export function LoginBox() {

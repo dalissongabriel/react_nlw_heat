@@ -124,4 +124,9 @@
       filter: brightness(0.9);
     }
   }
+
+  button[type=submit]:disabled {
+    cursor: default;
+    filter: brightness(0.5);
+  }
 }

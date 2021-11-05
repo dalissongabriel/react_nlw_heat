@@ -8,16 +8,23 @@ import {api} from "../../services/api";
 export function SendMessageForm() {
   const {user, singOut} = useAuthContext();
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleSendMessage(event: FormEvent) {
     event.preventDefault();
+    setLoading(true);
+
     if(!message.trim()) {
+      setLoading(false);
       return;
     }
 
     await api.post('/messages', { message });
+
     setMessage('');
+    setLoading(false);
   }
+
   return (
     <div className={styles.sendMessageFormWrapper}>
       <button className={styles.singOutButton} onClick={singOut}>
@@ -43,8 +50,10 @@ export function SendMessageForm() {
           onChange={(event) => setMessage(event.target.value)}
           value={message}
         />
-        <button type={"submit"}>Enviar mensagem</button>
+        <button type={"submit"} disabled={loading}>
+          {loading ? 'Carregando ...' : 'Enviar mensagem'}
+        </button>
       </form>
     </div>
   );
-};
+}
