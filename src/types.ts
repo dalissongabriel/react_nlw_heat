@@ -1,4 +1,4 @@
-export interface User {
+export type User = {
   id: string;
   name: string;
   avatar_url: string;
@@ -7,6 +7,6 @@ export interface User {
 }
 
 export type Message =  {
-  id: string, 
-  text: string,
+  id: string;
+  text: string;
 }

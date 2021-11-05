@@ -7,9 +7,9 @@ import {SendMessageForm} from "./components/SendMessageForm";
 export function App() {
   const {user} = useAuthContext();
   return (
-    <main className={styles.contentWrapper}>
+    <main className={`${styles.contentWrapper} ${!!user ? styles.contentSinged : ''}`}>
       <MessageList />
-      {user ? <SendMessageForm /> : <LoginBox />}
+      {!!user ? <SendMessageForm /> : <LoginBox />}
     </main>
   )
 };

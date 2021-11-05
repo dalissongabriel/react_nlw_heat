@@ -11,16 +11,18 @@ socket.on('new_message', (newMessage: MessageAndUser) => {
 
 export function useMessageList() {
   const [messages, setMessages] = useState<MessageAndUser[]>([]);
+
   useEffect(() => {
     const timer = setInterval(() => {
-      if(messagesQueue.length > 0) {
-        setMessages( prevValue =>
-          [
+      if (messagesQueue.length > 0) {
+        setMessages((prevState) => {
+          return [
             messagesQueue[0],
-            prevValue[0],
-            prevValue[1],
-          ].filter(Boolean)
-        );
+            prevState[0],
+            prevState[1],
+          ].filter(Boolean);
+        })
+        messagesQueue.shift();
       }
     }, 3000);
     return () => clearInterval(timer);
@@ -35,7 +37,7 @@ export function useMessageList() {
     try {
       loadLast3Messages();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },[]);
 
