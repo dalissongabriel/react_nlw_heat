@@ -17,7 +17,6 @@ const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({children}: AuthProvider) {
   const [user, setUser] = useState<User | null>(null);
-
   function getGithubCodeFromQueryString() {
     const url = window.location.href;
     const hasGithubCode = url.includes('?code=');
