@@ -1,3 +1,32 @@
+import styles from './style.module.scss';
+import {VscSignOut} from "react-icons/all";
+import {useAuthContext} from "../../contexts/auth";
+import {VscGithubInverted} from "react-icons/vsc";
+
 export function SendMessageForm() {
-  return <h1>Send Message Form</h1>;
+  const {user, singOut} = useAuthContext();
+  return (
+    <div className={styles.sendMessageFormWrapper}>
+      <button className={styles.singOutButton} onClick={singOut}>
+        <VscSignOut size={32} />
+      </button>
+      <header className={styles.userInformation}>
+        <div className={styles.userImage}>
+          <img src={user?.avatar_url} alt={user?.name} />
+        </div>
+        <strong className={styles.userName}>{user?.name}</strong>
+        <span className={styles.userGithub}>
+          <VscGithubInverted size={16} />
+          {user?.login}
+        </span>
+      </header>
+
+      <form className={styles.sendMessageForm}>
+        <label htmlFor="message">Mensagem</label>
+        <textarea name="message" id="message"  placeholder={"Qual sua expectativa para o evento?"} />
+
+        <button type={"submit"}>Enviar mensagem</button>
+      </form>
+    </div>
+  );
 };
